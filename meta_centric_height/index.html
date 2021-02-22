@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/nstyle.css" rel="stylesheet" type="text/css"/>
+    <link href="css/metacentric-height.css" rel="stylesheet" type="text/css"/>
+    <script src="js/metacentric-height.js"></script>
+    <title>Mechanical Lab</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-default visible-lg" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <div class="navbar-brand" href="#">To Determine The Metacentric Height of a floating object</div>
+    </div>
+</nav>
+<div class="inputDivision">
+    <div class="FirstInputBlock">
+        <div class="theoryStatementDivisionTitle"><div class="theoryPic"></div><div class="experimentText">Instructions</div></div>
+        <div class="inputDivisionBody" id="inputDivisionSimpleLoop">
+            <p></p><br/>
+            <p class="warningText">1. The slider here represents the number line referring to the distance of the object from the center in mm i.e for moving the object on the left -side, slide the slider to the direction of the negative numbers, and vice-versa.</p><br/>
+			<p class="warningText">2. The slider at first is at the 0mm from the center i.e. it is not moved to any distance.</p><br/>
+            <p class="warningText">3.  You can slide the slider either to left or in the right direction.</p><br/>
+            <p class="warningText">4. Each click on the slider represents the movement of the object from the center by 10mm i.e first click will move the object to 10mm, the second click will move it to 20mm, and so on.</p><br/>
+			<p class="warningText">5. The weight of the floating object is already calculated by using the formula W = V*Density of water, where V is the volume of water(V = Z*A) displaced from the tank due to the floating object. The Z is calculated as Z2-Z1.
+</p><br/>
+			<p class="warningText">6. The weight added to the floating body is fixed at 0.3056kg.
+</p><br/>
+			<p class="warningText">7. At each change of distance of the object, the tilt angle(θ) is calculated.</p><br/>
+
+        </div><!-- end of inputDivisionSimpleLoop -->
+    </div><!-- end of FirstInputBlock -->
+    <div class="SecondInputBlock">
+        <div class="inputDivisionTitle"><div class="experimentPic"></div><div class="experimentText">Initialize</div></div>
+        <div class="inputDivisionBody" id="inputDivisionSimpleLoop">
+            <div class="variableText">Initialize variables</div>
+            <label class="inputField" id="valueA" size="10" >Value of total weight of floating object = 1.5 Kg </label>
+            <label class="inputField" id="valueB" size="10">Value of weight of load = 0.3056 Kg</label>
+            <label class="inputField" size="10"> Value of displacement in load (use range slider given below, in mm) :</label>
+            <input class="inputField" class="slider" id="myRange" min="-80" max="80" value="0" step="10" size="10" type="range"/>
+            <button class="button startButton" id="okBtnId">OK</button>
+            <button class="buttonDisable myStartButton" disabled="" id="startBtnId">Start</button><button class="buttonDisable myStartButton hide" disabled="" id="stopBtnId">Stop</button>
+            <button class="buttonDisable nextButton" disabled="" id="nextBtnId">Next</button>
+        </div><!-- end of inputDivisionSimpleLoop -->
+    </div><!-- end of SecondInputBlock -->
+</div><!-- end of inputDivision -->
+<div class="executionDivision">
+    <div class="executionDivisionTitle"><div class="executionPic"></div><div class="executionText">Step Execution</div></div>
+    <div class="stepExecutionDisplay">
+        <div class="programCode" id="NumApproCode">
+            <div id="NumApproCodeContent1">1. Take an empty tank and fill it with water up, the height of the water level is Z1.</div>
+            <div id="NumApproCodeContent2">2. Now place the floating body having weight W in the tank,the water level rises upto Z2. </div>
+            <div id="NumApproCodeContent3">3. Adjust the floating ship.</div>
+            <div id="NumApproCodeContent4">4. After adjusting, add load of weight (w) to the horizontal beam of the floating body at centre of the beam.</div>
+            <div id="NumApproCodeContent5">5. Now displaced the load at a known distance Y from the centre of the beam. </div>
+            <div id="NumApproCodeContent6">6. Now the floating body will tilt at some angle on one side and observe the tilt angle.</div>
+            <div id="NumApproCodeContent7">7. Finally, calculate the metacentric height using the given formula.</div>
+            <div id="NumApproCodeContent8">Metacentric Height(GM) = (w*Y)/((W+w)*tan(θ) </div>
+            <div id="NumApproCodeContent9">where,<br/>
+                Weight of floating body = W <br/>
+                Additional weight added on the horizontal beam of the floating body = w <br/>
+                The distance of w from the center = Y<br/>
+                Tilt angle = θ
+                <br/>
+            </div>
+            <div id="NumApproCodeContent10">Now you are able to answer the following Question  :
+            </div>
+        </div><!-- end of programCode -->
+    </div><!-- end of stepExecutionDisplay -->
+</div><!-- end of executionDivision -->
+<div class="outputDivision">
+    <div class="outputDivisionTitle"><div class="outputPic"></div><div class="outputText">Result Visualization</div></div>
+    <div class="resultDisplay" id="resultDisplay">
+        <div class="graph">
+            <p><b>Simulation:</b></p>
+
+<br>
+  <canvas id="canvas" width="500" height="500" style="border:10px;">Your Browser does not support HTML 5 Canvas tag</canvas>
+<br>
+
+<div id="resultimg" style="width: 300px;"></div>
+
+
+<script type="text/javascript">
+
+    // getValue: return value from element.
+    function getValue (id) {
+        var value = document.getElementById(id);
+        return value;
+    }
+
+    var slider = getValue("myRange");
+    var inputValueD;
+    inputValueD = slider.value;
+    var inputValueA= 1.5;
+    var inputValueB= 0.3056;
+    var inputValueC=0;
+    var metacentricHeight=0;
+    slider.oninput = handleInput;
+    function handleInput() {
+        inputValueD = this.value;
+        if (inputValueD === "0"){
+            metacentricHeight = 0;
+        }
+        else{
+            if (inputValueD === "-10") {
+                inputValueC = 0.02618;
+            }
+            else if (inputValueD === "-20") {
+                inputValueC = 0.05240;
+            }
+            else if (inputValueD === "-30") {
+                inputValueC = 0.07870;
+            }
+            else if (inputValueD === "-40") {
+                inputValueC = 0.10514;
+            }
+            else if (inputValueD === "-50") {
+                inputValueC = 0.13165;
+            }
+            else if (inputValueD === "-60") {
+                inputValueC = 0.15838;
+            }
+            else if (inputValueD === "-70") {
+                inputValueC = 0.18533;
+            }
+            else if (inputValueD === "-80") {
+                inputValueC = 0.20345;
+            }
+            else if (inputValueD === "10") {
+                inputValueC = 0.02618;
+            }
+            else if (inputValueD === "20") {
+                inputValueC = 0.04366;
+            }
+            else if (inputValueD === "30") {
+                inputValueC = 0.07870;
+            }
+            else if (inputValueD === "40") {
+                inputValueC = 0.09628;
+            }
+            else if (inputValueD === "50" ) {
+                inputValueC = 0.13165;
+            }
+            else if (inputValueD === "60" ) {
+                inputValueC = 0.14945;
+            }
+            else if	( inputValueD === "70" ) {
+                inputValueC = 0.17632;
+            }
+            else if (inputValueD === "80") {
+                inputValueC = 0.20345;
+            }
+            metacentricHeight= (inputValueB*Math.abs(parseInt(inputValueD)))/((inputValueA+inputValueB)*(inputValueC));
+        }
+        var ctxt1 = canvas.getContext("2d");
+        ctxt1.font = "15px Arial";
+        ctxt1.fillText("tan(Tilt Angle) (tanθ) = " + inputValueC , 100, 160);
+        // ctxt1.textAlign= "top";
+        var ctxt2 = canvas.getContext("2d");
+        ctxt2.font = "15px Arial";
+        ctxt2.fillText("Metacentric Height in mm (GM) = " + metacentricHeight , 100, 280);
+        // ctxt2.textAlign= "top";
+        var ctxt3 = canvas.getContext("2d");
+        ctxt3.font = "15px Arial";
+        ctxt3.fillText("Weight of floating object in kg (W) = " + inputValueA , 100, 40);
+        var ctxt5 = canvas.getContext("2d");
+        ctxt5.font = "15px Arial";
+        ctxt5.fillText("Weight of Load in kg (w) = " + inputValueB , 100, 80);
+        // ctxt3.textAlign= "center";
+        if((Math.sign(parseInt(inputValueD)))=== -1){
+            var ctxt4 = canvas.getContext("2d");
+            ctxt4.font = "15px Arial";
+            ctxt4.fillText("Displacement in mm (Y) = " + Math.abs(parseInt(inputValueD)) + " Direction = Left" , 100, 120);
+        }
+        else if((Math.sign(parseInt(inputValueD)))=== 1){
+            var ctxt4 = canvas.getContext("2d");
+            ctxt4.font = "15px Arial";
+            ctxt4.fillText("Displacement in mm (Y) = " + Math.abs(parseInt(inputValueD)) + " Direction = Right" , 100, 120);
+        }
+        else{
+            var ctxt4 = canvas.getContext("2d");
+            ctxt4.font = "15px Arial";
+            ctxt4.fillText("Displacement in mm (Y) = 0 " + " Direction = center " + " Metacentric Height in mm = 0" , 80, 120);
+        }
+        var ctxt6 = canvas.getContext("2d");
+        ctxt6.font = "15px Arial";
+        ctxt6.fillText("Formula : ", 100, 200);
+        var ctxt7 = canvas.getContext("2d");
+        ctxt7.font = "15px Arial";
+        ctxt7.fillText("Metacentric Height (GM) = (w*Y)/((W+w)*tanθ) ", 100, 240);
+
+        disableElement("myRange");
+
+    }
+
+    // disableElement: makes element disable.
+    function disableElement(Id) {
+        document.getElementById(Id).disabled = true;
+    }
+
+    // var canvas = document.getElementById("canvas");
+    // var body = canvas.getContext("2d");
+    // body.fillStyle = "#ffffff";
+    // body.fillRect(500, 10, 800, 500);
+
+
+
+     function printValue(){
+         var ctxt1 = canvas.getContext("2d");
+         ctxt1.font = "10px Arial";
+         ctxt1.fillText("Yellow Object - Floating Object" , 10, 40);
+         ctxt1.textAlign= "right";
+         var ctxt2 = canvas.getContext("2d");
+         ctxt2.font = "10px Arial";
+         ctxt2.fillText("Red Object - Load on Floating Object" , 10, 30);
+         ctxt2.textAlign= "right";
+     }
+
+    //clear the canvas
+    function clearCanvas() {
+        var c = document.getElementById("canvas");
+        var grad = c.getContext("2d");
+        grad.clearRect(0, 0, this.canvas.width, this.canvas.height); // to clear previously drawed canvas.
+        grad.restore(); // restore canvas it's initial state.
+    }
+    // restoreCanvas: restore canvas it's initial state after clear previously drawed canvas.
+    function restoreCanvas() {
+        var c = document.getElementById("canvas");
+        var grad = c.getContext("2d");
+        grad.clearRect(0, 0, this.canvas.width, this.canvas.height); // to clear previously drawed canvas.
+        grad.restore(); // restore canvas it's initial state.
+        grad.font = "25px Arial";
+        grad.fillText("Metacentric Height of a floating object" , 10, 40);
+    }
+    function getwater() {
+        var c = document.getElementById("canvas");
+        var grad = c.getContext("2d");
+        var grd = grad.createLinearGradient(500,100,500,300);
+        grd.addColorStop(0,"white");
+        grd.addColorStop(1,"blue");
+        grad.fillStyle = grd;
+        grad.fillRect(0,0,400,300);
+    }
+
+    function getFloatingBody() {
+        var canvas = document.getElementById("canvas");
+        var body = canvas.getContext("2d");
+        body.fillStyle = "#e0c200";
+        body.fillRect(100,80,200,150);
+    }
+
+    function getbodyandmass() {
+        var canvas = document.getElementById("canvas");
+        var body = canvas.getContext("2d");
+        body.fillStyle = "#e0c200";
+        body.fillRect(100,80,200,150);
+        var xmass = canvas.getContext("2d");
+        xmass.fillStyle = "#FF0000";
+        xmass.fillRect(170,40,60,40);
+    }
+
+    function displacedInLoad(){
+        var canvas = document.getElementById("canvas");
+        var body = canvas.getContext("2d");
+        body.fillStyle = "#e0c200";
+        body.fillRect(100,80,200,150);
+        var xmass = canvas.getContext("2d");
+        xmass.fillStyle = "#FF0000";
+        var inputValueD;
+        slider.oninput = handleInput;
+        function handleInput() {
+            inputValueD = this.value;
+            inputValueD = parseInt(inputValueD);
+        }
+        if((Math.sign(this.inputValueD))=== -1){
+            xmass.fillRect(160,40,50,40);
+        }
+        else if((Math.sign(this.inputValueD))===1){
+            xmass.fillRect(180, 40, 70, 40);
+        }
+        else{
+            xmass.fillRect(170, 40, 60, 40);
+        }
+    }
+
+    function canvas_arrow(context, fromx, fromy, tox, toy) {
+        var headlen = 20;
+        var dx = tox - fromx;
+        var dy = toy - fromy;
+        var angle = Math.atan2(dy, dx);
+        context.moveTo(fromx, fromy);
+        context.lineTo(tox, toy);
+        context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+        context.moveTo(tox, toy);
+        context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+    }
+
+    function getmarkingandarr() {
+        ctx = document.getElementById("canvas").getContext("2d");
+        ctx.beginPath();
+        canvas_arrow(ctx, 200, 50, 200+(200*inputValueC), 200);
+        canvas_arrow(ctx, 200, 50, 200, 200);
+        //canvas_arrow(ctx, 100, 30, 100, 150);
+        //canvas_arrow(ctx, 400, 200, 100, 50);
+        //canvas_arrow(ctx, 100, 200, 400, 50);
+        ctx.stroke();
+        var ctxt = canvas.getContext("2d");
+        ctxt.font = "20px Arial";
+        ctxt.fillText("w",180,40);
+        ctxt.fillText("M",180,100);
+        ctxt.fillText("G",180,145);
+        ctxt.fillText("B",180,185);
+        ctxt.fillText("K",180,230);
+        ctxt.fillStyle = "#000000";
+        var cline = canvas.getContext("2d");
+        cline.moveTo(200,20);
+        cline.lineTo(200,250);
+        cline.stroke();
+        var cc = canvas.getContext("2d");
+        cc.beginPath();
+        cc.arc(200,50,2,0,2*Math.PI);
+        cc.arc(200,100,2,0,2*Math.PI);
+        cc.arc(200,145,2,0,2*Math.PI);
+        cc.arc(200,185,2,0,2*Math.PI);
+        cc.arc(200,230,2,0,2*Math.PI);
+        cc.fillstyle = "black" ;
+        cc.stroke();
+    }
+    function printvalue() {
+        var ctxt1 = canvas.getContext("2d");
+        ctxt1.font = "15px Arial";
+        // ctxt1.fillText("Angle - " + inputValueC , 10, 40);
+        var ctxt2 = canvas.getContext("2d");
+        ctxt2.font = "15px Arial";
+        ctxt2.fillText("Metacentric Height in mm = " + metacentricHeight , 10, 20);
+        ctxt2.textAlign= top;
+        //var ctx = canvas.getContext("2d");
+        //ctx.font = "15px Arial";
+        //ctx.fillText("some text-"+(Math.tan(inputValueC)) , 10, 60);
+
+	    if (metacentricHeight < 0) {
+            msg = ' Unstable ';
+            imageshown = "images/unstable.png"
+        }
+
+        else if ( metacentricHeight === 0) {
+            msg = ' Neutral ';
+            imageshown = "images/neutral.png"
+        }
+
+        else{
+            msg = ' Stable ';
+            imageshown = "images/stable.png"
+        }
+
+        var resultimg = document.getElementById('resultimg');
+        var img = result.nextElementSibling;
+
+        resultimg.textContent = msg;
+        img.src = imageshown;
+    }
+</script>
+        </div><!-- end of InputBlock -->
+    </div><!-- end of resultDisplay -->
+</div><!-- end of outputDivision -->
+
+
+</body></html>
