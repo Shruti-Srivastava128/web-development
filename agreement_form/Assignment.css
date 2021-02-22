@@ -1,0 +1,135 @@
+div[id="form"]{
+    overflow:hidden;
+    max-height: 1350px;
+    font-variant: small-caps;
+    font-size: x-large;
+    border-radius: 10px;
+     border:5px dashed red;
+    padding:13px 13px 13px 20px;
+    margin:10px auto;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.9);
+    animation:  anime 20s ease-in-out infinite;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+body{
+    animation: anim 5s;
+}
+#pdf{
+    text-align: right;
+}
+input[type="text"]:hover{
+    background-color: crimson;
+}
+input[type="text"]{
+    text-align: center;
+    backface-visibility: hidden;
+}
+input[type="headline"]{
+    backface-visibility: hidden;
+    color:black;
+    height: 30px;
+    text-align: center;
+    animation:  anime 20s ease-in-out infinite;
+}
+input[type="file"]:hover{
+  background-color: burlywood;
+}
+h1{
+    animation-name: moveToLeft;
+    animation-duration: 7s;
+}
+h3{
+    text-decoration: underline;
+}
+span#days{
+    text-decoration: underline;
+    display: inline-block;
+    animation:animate 5s linear infinite;
+}
+span:hover{
+    background-color: cyan;
+    cursor: pointer;
+}
+span#VenueMock{
+    display: inline-block;
+    animation: animate 8s;
+    animation-iteration-count: 2;
+}
+table{
+    border:7px solid black;
+    padding: 7px;
+    animation-name: animatetbl;
+    animation-duration: 10s;
+ }
+table:hover{
+    background-color: chartreuse;
+}
+td{
+    border:3px solid black;
+    padding: 4px;
+    }
+#Venuename{
+    transform: translate(75%,-100%);
+    animation-name: moveToLeft;
+    animation-duration: 10s;
+}
+#Venuemock{
+    animation-name: moveToLeft;
+    animation-duration: 10s;
+}
+@keyframes moveToLeft{
+    0%{
+        transform:translateX(120px);
+        opacity: 0;
+        }
+    100%{
+        transform:translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes animatetbl{
+    0%{
+        opacity: 0;
+        }
+    100%{
+        opacity: 1;
+    }
+}
+@keyframes moveToRight{
+    0%{
+        transform: :translateX(-120px);
+        opacity: 0;
+        }
+
+
+    100%{
+        transform:translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes anim{
+    50%{
+        transform: scale(2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+@keyframes animate{
+    0%{
+        opacity: 0;
+        transform:rotateY(90deg);
+        filter: blur(10px);
+    }
+    100%{
+        opacity: 1;
+        transform: rotateY(0deg);
+        filter: blur(0);
+    }
+}
+@keyframes anime{
+    0%,75%{background-image: radial-gradient(bisque,cadetblue,bisque);}
+    25%,100%{background-image: linear-gradient(cornsilk,aquamarine,cornsilk);}
+    50%{background-image: url(606862_20170508172636.png);}
+}
